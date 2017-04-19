@@ -1,11 +1,11 @@
 var express = require('express');
-var app = express();
+var _ = require('lodash');
 var Client = require('./src/client');
 var config = require('./src/config');
+
 var PORT = process.env.PORT || 3000;
-
-
-var usrConfig =  config.getConfig();
+var app = express();
+var usrConfig = config.getConfig();
 
 // get from DB
 usrConfig.region = 'na';
@@ -18,73 +18,112 @@ var client = new Client(usrConfig);
 /**
  * CAMPAIGN MANAGER
  */
-app.post('/campaigns', function(req, res){
+/** Returned object 
+[
+  {
+    "code": "SUCCESS",
+    "campaignId": 210894557191929
+  }
+]
+*/
+app.post('/campaigns', function (req, res) {
     var campaign = [{
-                        name: 'Campaign 9',
-                        state: 'enabled',
-                        startDate: '20170418',
-                        campaignType: 'sponsoredProducts',
-                        targetingType: 'manual',
-                        dailyBudget: 1
-                    }];
-   client.createCampaigns(campaign, function(result) {
-      res.send(result); 
-  });
+        name: 'Campaign 13',
+        state: 'enabled',
+        startDate: '20170419',
+        campaignType: 'sponsoredProducts',
+        targetingType: 'manual',
+        dailyBudget: 1
+    }];
+    client.createCampaigns(campaign, function (error, result) {
+        if (!_.isEmpty(error)) {
+            res.status(error.statusCode);
+            res.send(error);
+        } else {
+            res.send(result);
+        }
+
+    });
 });
 
-app.put('/campaigns', function(req, res){
+app.put('/campaigns', function (req, res) {
     var campaigns = [{
-                        campaignId: 11388273803182,
-                        name: 'Campaign 9',
-                        state: 'enabled',
-                        startDate: '20170420',
-                        campaignType: 'sponsoredProducts',
-                        targetingType: 'manual',
-                        dailyBudget: 1
-                    },
-                    {
-                        campaignId: 127135937647154,
-                        name: 'Campaign 8 - Demo update campaign',
-                        state: 'enabled',
-                        startDate: '20170420',
-                        campaignType: 'sponsoredProducts',
-                        targetingType: 'manual',
-                        dailyBudget: 1
-                    }];
-   client.updateCampaigns(campaigns, function(result) {
-      res.send(result); 
-  });
+        campaignId: 11388273803182,
+        name: 'Campaign 9',
+        state: 'enabled',
+        startDate: '20170420',
+        campaignType: 'sponsoredProducts',
+        targetingType: 'manual',
+        dailyBudget: 1
+    },
+    {
+        campaignId: 127135937647154,
+        name: 'Campaign 8 - Demo update campaign',
+        state: 'enabled',
+        startDate: '20170420',
+        campaignType: 'sponsoredProducts',
+        targetingType: 'manual',
+        dailyBudget: 1
+    }];
+    client.updateCampaigns(campaigns, function (error, result) {
+        if (!_.isEmpty(error)) {
+            res.status(error.statusCode);
+            res.send(error);
+        } else {
+            res.send(result);
+        }
+    });
 });
 
-app.get('/campaigns', function(req, res){
-   var queryParams = {
-       startIndex: 0,
-       count: 4,
-       stateFilter: 'enabled'
-   }
-   client.listCampaigns('', function(result) {
-      res.send(result); 
-  });
+app.get('/campaigns', function (req, res) {
+    var queryParams = {
+        startIndex: 0,
+        count: 4,
+        stateFilter: ''
+    }
+    client.listCampaigns('', function (error, result) {
+        if (!_.isEmpty(error)) {
+            res.status(error.statusCode);
+            res.send(error);
+        } else {
+            res.send(result);
+        }
+    });
 })
 
-app.get('/campaignsEx', function(req, res){
-   client.listCampaignsEx('', function(result) {
-      res.send(result); 
-  });
+app.get('/campaignsEx', function (req, res) {
+    client.listCampaignsEx('', function (error, result) {
+        if (!_.isEmpty(error)) {
+            res.status(error.statusCode);
+            res.send(error);
+        } else {
+            res.send(result);
+        }
+    });
 })
 
-app.get('/campaigns/:campaignId', function(req, res){
+app.get('/campaigns/:campaignId', function (req, res) {
     var campaignId = req.params['campaignId'];
-   client.getCampaign(campaignId, function(result) {
-      res.send(result); 
-  });
+    client.getCampaign(campaignId, function (error, result) {
+        if (!_.isEmpty(error)) {
+            res.status(error.statusCode);
+            res.send(error);
+        } else {
+            res.send(result);
+        }
+    });
 })
 
-app.get('/campaigns/archive/:campaignId', function(req, res){
+app.get('/campaigns/archive/:campaignId', function (req, res) {
     var campaignId = req.params['campaignId'];
-   client.archiveCampaign(campaignId, function(result) {
-      res.send(result); 
-  });
+    client.archiveCampaign(campaignId, function (error, result) {
+        if (!_.isEmpty(error)) {
+            res.status(error.statusCode);
+            res.send(error);
+        } else {
+            res.send(result);
+        }
+    });
 })
 /**================================ */
 
@@ -92,71 +131,189 @@ app.get('/campaigns/archive/:campaignId', function(req, res){
  * AdGroup MANAGER
  */
 
-app.post('/adGroups', function(req, res){
+app.post('/adGroups', function (req, res) {
     var adGroup = [{
-                        name: 'Adgroup 2 for campaign 6',
-                        campaignId: 227788946732087,
-                        defaultBid: 0.2,
-                        state: 'enabled'
-                    },
-                    {
-                        name: 'Adgroup 3 for campaign 7',
-                        campaignId: 228878922766269,
-                        defaultBid: 0.3,
-                        state: 'enabled'
-                    },
-                    {
-                        name: 'Adgroup 4 for campaign 8',
-                        campaignId: 127135937647154,
-                        defaultBid: 0.5,
-                        state: 'enabled'
-                    }];
-   client.createAdGroups(adGroup, function(result) {
-      res.send(result); 
-  });
+        name: 'Adgroup 2 for campaign 6',
+        campaignId: 227788946732087,
+        defaultBid: 0.2,
+        state: 'enabled'
+    },
+    {
+        name: 'Adgroup 3 for campaign 7',
+        campaignId: 228878922766269,
+        defaultBid: 0.3,
+        state: 'enabled'
+    },
+    {
+        name: 'Adgroup 4 for campaign 8',
+        campaignId: 127135937647154,
+        defaultBid: 0.5,
+        state: 'enabled'
+    }];
+    client.createAdGroups(adGroup, function (error, result) {
+        if (!_.isEmpty(error)) {
+            res.status(error.statusCode);
+            res.send(error);
+        } else {
+            res.send(result);
+        }
+    });
 });
 
-app.put('/adGroups', function(req, res){
-    var adGroups = [{   
-                        adGroupId: 249165991644306,
-                        name: 'Adgroup 2 for campaign 6',
-                        defaultBid: 0.2,
-                        state: 'paused'
-                    }];
+app.put('/adGroups', function (req, res) {
+    var adGroups = [{
+        adGroupId: 249165991644306,
+        name: 'Adgroup 2 for campaign 6',
+        defaultBid: 0.2,
+        state: 'paused'
+    }];
     console.log(adGroups);
-   client.updateAdGroups(adGroups, function(result) {
-      res.send(result); 
-  });
+    client.updateAdGroups(adGroups, function (error, result) {
+        if (!_.isEmpty(error)) {
+            res.status(error.statusCode);
+            res.send(error);
+        } else {
+            res.send(result);
+        }
+    });
 });
 
-app.get('/adGroups', function(req, res){
-   client.listAdGroups('', function(result) {
-      res.send(result); 
-  });
+app.get('/adGroups', function (req, res) {
+    client.listAdGroups('', function (error, result) {
+        if (!_.isEmpty(error)) {
+            res.status(error.statusCode);
+            res.send(error);
+        } else {
+            res.send(result);
+        }
+    });
 });
 
-app.get('/adGroupsEx', function(req, res){
-   client.listAdGroupsEx('', function(result) {
-      res.send(result); 
-  });
+app.get('/adGroupsEx', function (req, res) {
+    client.listAdGroupsEx('', function (error, result) {
+        if (!_.isEmpty(error)) {
+            res.status(error.statusCode);
+            res.send(error);
+        } else {
+            res.send(result);
+        }
+    });
 });
 
-app.get('/adGroups/:adGroupId', function(req, res){
+app.get('/adGroups/:adGroupId', function (req, res) {
     var adGroupId = req.params['adGroupId'];
-   client.getAdGroup(adGroupId, function(result) {
-      res.send(result); 
-  });
+    client.getAdGroup(adGroupId, function (error, result) {
+        if (!_.isEmpty(error)) {
+            res.status(error.statusCode);
+            res.send(error);
+        } else {
+            res.send(result);
+        }
+    });
 });
 
-app.get('/adGroups/archive/:adGroupId', function(req, res){
+app.get('/adGroups/archive/:adGroupId', function (req, res) {
     var adGroupId = req.params['adGroupId'];
-   client.archiveCampaign(adGroupId, function(result) {
-      res.send(result); 
-  });
+    client.archiveCampaign(adGroupId, function (error, result) {
+        if (!_.isEmpty(error)) {
+            res.status(error.statusCode);
+            res.send(error);
+        } else {
+            res.send(result);
+        }
+        res.send(result);
+    });
 });
 
+/**
+ * KEYWORD MANAGER
+ */
+// Cannot create keywords in ad groups belonging to auto targeted campaigns
+// DUPLICATE code if keyword was existed!
+app.post('/keywords', function (req, res) {
+    var keywords = [{
+        campaignId: 127135937647154,
+        adGroupId: 138644248283076,
+        keywordText: 'cat',
+        matchType: 'broad',
+        bid: 0.2,
+        state: 'enabled'
+    },
+    {
+        campaignId: 127135937647154,
+        adGroupId: 138644248283076,
+        keywordText: 'little',
+        matchType: 'phrase',
+        bid: 0.02,
+        state: 'enabled'
+    },
+    {
+        campaignId: 228878922766269,
+        adGroupId: 234570594397144,
+        keywordText: 'dog',
+        matchType: 'exact',
+        bid: 0.03,
+        state: 'enabled'
+    }];
+    client.createBiddableKeywords(keywords, function (error, result) {
+        if (!_.isEmpty(error)) {
+            res.status(error.statusCode);
+            res.send(error);
+        } else {
+            res.send(result);
+        }
+    });
+});
+
+app.get('/keywords', function (req, res) {
+    client.listBiddableKeywords('', function (error, result) {
+        if (!_.isEmpty(error)) {
+            res.status(error.statusCode);
+            res.send(error);
+        } else {
+            res.send(result);
+        }
+    });
+});
+
+/**
+ * ProductAds MANAGER
+ */
+//  "code": "INVALID_ARGUMENT",
+//    "description": "Product ad specified asin for create operation."
+app.post('/productAds', function (req, res) {
+    var productAds = [
+        {
+            campaignId: 127135937647154,
+            adGroupId: 138644248283076,
+            sku: '1displitter',
+            asin: 'B01FK6M9V6',
+            state: 'enabled'
+        }
+    ];
+    client.createProductAds(productAds, function (error, result) {
+        if (!_.isEmpty(error)) {
+            res.status(error.statusCode);
+            res.send(error);
+        } else {
+            res.send(result);
+        }
+    });
+});
+
+app.get('/productAds', function (req, res) {
+    client.listProductAds('', function (error, result) {
+        if (!_.isEmpty(error)) {
+            res.status(error.statusCode);
+            res.send(error);
+        } else {
+            res.send(result);
+        }
+    });
+});
 /**================================ */
-app.listen(PORT, function(err) {
+
+app.listen(PORT, function (err) {
     if (err) {
         console.log(err);
     }
