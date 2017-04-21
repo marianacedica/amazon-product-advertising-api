@@ -901,61 +901,53 @@ Client.prototype.operation = function (apiInterface, data, method, accessToken, 
     request(options, function (error, response, body) {
         if (error) throw new Error(error);
 
-        if (response.statusCode === 401) {
-            console.log('Access token is not valid! Need get again!');
-            that.getAuthToken(function (accessToken) {
-                  that.operation(apiInterface, data, method, accessToken, cb);
-            });
-        } else {
-            var error = {};
-            var result = options.json ? body : JSON.parse(body);
-            switch (response.statusCode) {
-                case 400: 
-                    error.statusCode = 400;
-                    error.text = 'Bad request - General request error that doesn’t fall into any other category.';
-                    break;
-                case 401: 
-                    error.statusCode = 401;
-                    error.text = 'Unauthorized - Request failed because user is not authenticated.';
-                    break;
-                case 403: 
-                    error.statusCode = 403;
-                    error.text = 'Forbidden - Request failed because user does not have access to a specified resource.';
-                    break;
-                case 404: 
-                    error.statusCode = 404;
-                    error.text = 'Requested resource does not exist or is not visible for the authenticated user.';
-                    break;         
-                case 422:
-                    error.statusCode = 422;
-                    error.text = 'Unprocessable entity - Request was understood, but contained invalid parameters.';
-                    break;
-                case 429:
-                    error.statusCode = 429;
-                    error.text = 'Too many requests - Request was rate-limited. Retry later.';
-                    break;
-                case 500:
-                    error.statusCode = 500;
-                    error.text = 'Internal Error - Something went wrong on the server. Retry later and report an error if unresolved.';
-                    break;
-                case 207:
-                    if (result[0].code !== 'SUCCESS') {
-                        error.statusCode = 207;
-                        error.text = result[0].description ? result[0].description : `${result[0].code}`;
-                        error.errorDetails = result;
-                    }
-                    break;    
-            }
-            
-            if (!_.isEmpty(error)) {
-                if (body.details) {
-                    error.details = body.details;
-                }        
-            }
-
-            cb(error, result);
+        var error = {};
+        var result = options.json ? body : JSON.parse(body);
+        switch (response.statusCode) {
+            case 400: 
+                error.statusCode = 400;
+                error.text = 'Bad request - General request error that doesn’t fall into any other category.';
+                break;
+            case 401: 
+                error.statusCode = 401;
+                error.text = 'Unauthorized - Request failed because user is not authenticated.';
+                break;
+            case 403: 
+                error.statusCode = 403;
+                error.text = 'Forbidden - Request failed because user does not have access to a specified resource.';
+                break;
+            case 404: 
+                error.statusCode = 404;
+                error.text = 'Requested resource does not exist or is not visible for the authenticated user.';
+                break;         
+            case 422:
+                error.statusCode = 422;
+                error.text = 'Unprocessable entity - Request was understood, but contained invalid parameters.';
+                break;
+            case 429:
+                error.statusCode = 429;
+                error.text = 'Too many requests - Request was rate-limited. Retry later.';
+                break;
+            case 500:
+                error.statusCode = 500;
+                error.text = 'Internal Error - Something went wrong on the server. Retry later and report an error if unresolved.';
+                break;
+            case 207:
+                if (result[0].code !== 'SUCCESS') {
+                    error.statusCode = 207;
+                    error.text = result[0].description ? result[0].description : `${result[0].code}`;
+                    error.errorDetails = result;
+                }
+                break;    
         }
-       
+        
+        if (!_.isEmpty(error)) {
+            if (body.details) {
+                error.details = body.details;
+            }        
+        }
+
+        cb(error, result);    
     });
 }
 
