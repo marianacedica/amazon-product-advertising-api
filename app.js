@@ -8,10 +8,19 @@ var app = express();
 var usrConfig = config.getConfig();
 
 // get from DB
-usrConfig.region = 'na';
-usrConfig.refreshToken = 'Atzr|IwEBIDBNksIx9-RFqasKapmAlzIg-VjCraWKM5kaP7FSJz5ec_g5uRjpKfdEe1mJsws24zhrMcH3f8pd00xPbPViUY4mENTyDziztjQ_xGyP-rsFd_MhlU6sgOVya4RwpFVwg1J4i86Sr3Li-ljQFhAi6fVE5Kf0Q9UQaoK9AXu5HQqv8ZywRMtTbauQQmaOECex8u8Wkrrz2bt8HFNXitvPBPZJEt2R1fbiV2W_e3IGG6fncJErWmZAeWwrPrVk4AQu1cdaY81U7wwbLvDhbuOvv3ZkKpAgUNmimErkGajVdMefa27QzuqV-yInRNfQFIi525wXi_mAJQLEd3ftsKgTp-rVX7AGh9ixdIoRaN24zzaohwu860ejxXrLvoEf0oWB3JaY_QP7iE-7KGR4UjKSgzQqddcHD3R4a4DpsZxEihegYetOUjDn-lV8lOnnx5OdGKDrQ5gMDjOZKV6R8B0kVb8ehe8IFudd6B21e35Bwo1yZ0epjS3wjMgSCyqPvhvHgujrUpvJF0XrdqO_roCEqP-pVAR1JdqeE8_teAiwXe5lj1b92A4aFq4AlCwPyC-lJRW896yTr6CCCxrDQMaleEdTvdGQ_rb0VvzI7Ggf03Knfw';
-usrConfig.accessToken = '';
-usrConfig.profileId = '164447190389066';
+if (usrConfig.sandbox) {
+    usrConfig.region = 'na';
+    usrConfig.refreshToken = 'Atzr|IwEBIDBNksIx9-RFqasKapmAlzIg-VjCraWKM5kaP7FSJz5ec_g5uRjpKfdEe1mJsws24zhrMcH3f8pd00xPbPViUY4mENTyDziztjQ_xGyP-rsFd_MhlU6sgOVya4RwpFVwg1J4i86Sr3Li-ljQFhAi6fVE5Kf0Q9UQaoK9AXu5HQqv8ZywRMtTbauQQmaOECex8u8Wkrrz2bt8HFNXitvPBPZJEt2R1fbiV2W_e3IGG6fncJErWmZAeWwrPrVk4AQu1cdaY81U7wwbLvDhbuOvv3ZkKpAgUNmimErkGajVdMefa27QzuqV-yInRNfQFIi525wXi_mAJQLEd3ftsKgTp-rVX7AGh9ixdIoRaN24zzaohwu860ejxXrLvoEf0oWB3JaY_QP7iE-7KGR4UjKSgzQqddcHD3R4a4DpsZxEihegYetOUjDn-lV8lOnnx5OdGKDrQ5gMDjOZKV6R8B0kVb8ehe8IFudd6B21e35Bwo1yZ0epjS3wjMgSCyqPvhvHgujrUpvJF0XrdqO_roCEqP-pVAR1JdqeE8_teAiwXe5lj1b92A4aFq4AlCwPyC-lJRW896yTr6CCCxrDQMaleEdTvdGQ_rb0VvzI7Ggf03Knfw';
+    usrConfig.accessToken = '';
+    usrConfig.profileId = '164447190389066';
+} else {
+     usrConfig.region = 'na';
+    usrConfig.refreshToken = 'Atzr|IwEBIDBNksIx9-RFqasKapmAlzIg-VjCraWKM5kaP7FSJz5ec_g5uRjpKfdEe1mJsws24zhrMcH3f8pd00xPbPViUY4mENTyDziztjQ_xGyP-rsFd_MhlU6sgOVya4RwpFVwg1J4i86Sr3Li-ljQFhAi6fVE5Kf0Q9UQaoK9AXu5HQqv8ZywRMtTbauQQmaOECex8u8Wkrrz2bt8HFNXitvPBPZJEt2R1fbiV2W_e3IGG6fncJErWmZAeWwrPrVk4AQu1cdaY81U7wwbLvDhbuOvv3ZkKpAgUNmimErkGajVdMefa27QzuqV-yInRNfQFIi525wXi_mAJQLEd3ftsKgTp-rVX7AGh9ixdIoRaN24zzaohwu860ejxXrLvoEf0oWB3JaY_QP7iE-7KGR4UjKSgzQqddcHD3R4a4DpsZxEihegYetOUjDn-lV8lOnnx5OdGKDrQ5gMDjOZKV6R8B0kVb8ehe8IFudd6B21e35Bwo1yZ0epjS3wjMgSCyqPvhvHgujrUpvJF0XrdqO_roCEqP-pVAR1JdqeE8_teAiwXe5lj1b92A4aFq4AlCwPyC-lJRW896yTr6CCCxrDQMaleEdTvdGQ_rb0VvzI7Ggf03Knfw';
+    usrConfig.accessToken = '';
+    usrConfig.profileId = '2314603341970157';
+}
+
+
 
 var client = new Client(usrConfig);
 
@@ -28,9 +37,9 @@ var client = new Client(usrConfig);
 */
 app.post('/campaigns', function (req, res) {
     var campaign = [{
-        name: 'Campaign 13',
+        name: 'Holiday',
         state: 'enabled',
-        startDate: '20170419',
+        startDate: '20170425',
         campaignType: 'sponsoredProducts',
         targetingType: 'manual',
         dailyBudget: 1

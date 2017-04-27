@@ -906,36 +906,36 @@ Client.prototype.operation = function (apiInterface, data, method, accessToken, 
         switch (response.statusCode) {
             case 400: 
                 error.statusCode = 400;
-                error.text = 'Bad request - General request error that doesn’t fall into any other category.';
+                error.text = 'Bad request - General request error that doesn’t fall into any other category - Url: ' +  options.url;
                 break;
             case 401: 
                 error.statusCode = 401;
-                error.text = 'Unauthorized - Request failed because user is not authenticated.';
+                error.text = 'Unauthorized - Request failed because user is not authenticated - Url: ' +  options.url;
                 break;
             case 403: 
                 error.statusCode = 403;
-                error.text = 'Forbidden - Request failed because user does not have access to a specified resource.';
+                error.text = 'Forbidden - Request failed because user does not have access to a specified resource - Url: ' +  options.url;
                 break;
             case 404: 
                 error.statusCode = 404;
-                error.text = 'Requested resource does not exist or is not visible for the authenticated user.';
+                error.text = 'Requested resource does not exist or is not visible for the authenticated user - Url: ' +  options.url;
                 break;         
             case 422:
                 error.statusCode = 422;
-                error.text = 'Unprocessable entity - Request was understood, but contained invalid parameters.';
+                error.text = 'Unprocessable entity - Request was understood, but contained invalid parameters - Url: ' +  options.url;
                 break;
             case 429:
                 error.statusCode = 429;
-                error.text = 'Too many requests - Request was rate-limited. Retry later.';
+                error.text = 'Too many requests - Request was rate-limited. Retry later - Url: ' +  options.url;
                 break;
             case 500:
                 error.statusCode = 500;
-                error.text = 'Internal Error - Something went wrong on the server. Retry later and report an error if unresolved.';
+                error.text = 'Internal Error - Something went wrong on the server. Retry later and report an error if unresolved - Url: ' +  options.url;
                 break;
             case 207:
                 if (result[0].code !== 'SUCCESS') {
                     error.statusCode = 207;
-                    error.text = result[0].description ? result[0].description : `${result[0].code}`;
+                    error.text = result[0].description ? result[0].description : `${result[0].code}` + ' - Url: ' +  options.url;
                     error.errorDetails = result;
                 }
                 break;    
